@@ -5,6 +5,8 @@ import PhotoFrame from "@/components/PhotoFrame";
 import { Heart, Send, Copy, Check } from "lucide-react";
 import { toast } from "sonner";
 
+const generateId = () => Math.random().toString(36).substring(2, 10);
+
 const Index = () => {
   const [toName, setToName] = useState("");
   const [fromName, setFromName] = useState("");
@@ -22,36 +24,17 @@ const Index = () => {
   }, []);
 
   const generateShareLink = () => {
+    const id = generateId();
     const data = {
       to: toName,
       from: fromName,
       message,
       photos: photos.filter(Boolean) as string[],
     };
-
-    const jsonStr = JSON.stringify(data);
-    const encoded = btoa(jsonStr);
-
-    // Check URL length - browsers support ~2000 chars in URL, but data URIs for photos can be huge
-    const baseUrl = window.location.origin;
-    const link = `${baseUrl}/card?d=${encoded}`;
-
-    if (link.length > 64000) {
-      // Too long with photos, try without
-      const textOnly = {
-        to: toName,
-        from: fromName,
-        message,
-        photos: [] as string[],
-      };
-      const textEncoded = btoa(JSON.stringify(textOnly));
-      const textLink = `${baseUrl}/card?d=${textEncoded}`;
-      setShareLink(textLink);
-      toast("Photos are too large for the link. Text-only version created. Consider downloading the card for the full version!", { duration: 5000 });
-    } else {
-      setShareLink(link);
-      toast.success("Your Valentine's card link is ready! 💖");
-    }
+    localStorage.setItem(`valentine-${id}`, JSON.stringify(data));
+    const link = `${window.location.origin}/card?id=${id}`;
+    setShareLink(link);
+    toast.success("Your Valentine's card is ready! 💖");
   };
 
   const copyLink = async () => {
@@ -67,7 +50,6 @@ const Index = () => {
       <FloatingHearts />
 
       <div className="relative z-10 flex flex-col items-center py-10 px-4">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -86,7 +68,6 @@ const Index = () => {
           </p>
         </motion.div>
 
-        {/* Card */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -98,7 +79,6 @@ const Index = () => {
           <span className="absolute bottom-4 left-4 text-2xl text-primary/40">💖</span>
           <span className="absolute bottom-4 right-4 text-2xl text-primary/40">💕</span>
 
-          {/* To */}
           <div className="mb-6">
             <label className="text-sm text-muted-foreground uppercase tracking-wider mb-1 block">To</label>
             <input
@@ -110,13 +90,11 @@ const Index = () => {
             />
           </div>
 
-          {/* Photos */}
           <div className="flex flex-wrap justify-center gap-6 my-8">
             <PhotoFrame label="Our Photo 💑" onPhotoChange={(url) => handlePhotoChange(0, url)} />
             <PhotoFrame label="A Memory 📸" onPhotoChange={(url) => handlePhotoChange(1, url)} />
           </div>
 
-          {/* Message */}
           <div className="mb-6">
             <label className="text-sm text-muted-foreground uppercase tracking-wider mb-1 block">My Love Letter</label>
             <textarea
@@ -128,14 +106,12 @@ const Index = () => {
             />
           </div>
 
-          {/* Divider */}
           <div className="flex items-center gap-4 my-6">
             <div className="flex-1 h-px bg-primary/20" />
             <span className="text-primary text-xl animate-pulse-heart">♥</span>
             <div className="flex-1 h-px bg-primary/20" />
           </div>
 
-          {/* From */}
           <div className="mb-4">
             <label className="text-sm text-muted-foreground uppercase tracking-wider mb-1 block">With all my love,</label>
             <input
@@ -147,13 +123,11 @@ const Index = () => {
             />
           </div>
 
-          {/* Extra photo */}
           <div className="flex flex-wrap justify-center gap-6 mt-8">
             <PhotoFrame label="Us Together 💞" onPhotoChange={(url) => handlePhotoChange(2, url)} />
           </div>
         </motion.div>
 
-        {/* Share Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -172,25 +146,29 @@ const Index = () => {
             <motion.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
-              className="w-full max-w-2xl bg-card border border-border rounded-xl p-4 flex items-center gap-3"
+              className="w-full max-w-2xl bg-card border border-border rounded-xl p-4"
             >
-              <input
-                readOnly
-                value={shareLink}
-                className="flex-1 bg-secondary/30 rounded-lg border border-primary/20 px-3 py-2 text-sm text-foreground truncate outline-none"
-              />
-              <button
-                onClick={copyLink}
-                className="flex items-center gap-1 bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity shrink-0"
-              >
-                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-                {copied ? "Copied!" : "Copy"}
-              </button>
+              <p className="text-sm text-muted-foreground font-handwriting mb-3 text-center">
+                ⚠️ This link only works on this device/browser since the card is saved locally. To share with someone else, consider taking a screenshot! 💕
+              </p>
+              <div className="flex items-center gap-3">
+                <input
+                  readOnly
+                  value={shareLink}
+                  className="flex-1 bg-secondary/30 rounded-lg border border-primary/20 px-3 py-2 text-sm text-foreground truncate outline-none"
+                />
+                <button
+                  onClick={copyLink}
+                  className="flex items-center gap-1 bg-primary text-primary-foreground px-4 py-2 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity shrink-0"
+                >
+                  {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                  {copied ? "Copied!" : "Copy"}
+                </button>
+              </div>
             </motion.div>
           )}
         </motion.div>
 
-        {/* Footer */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

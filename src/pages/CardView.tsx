@@ -4,20 +4,23 @@ import FloatingHearts from "@/components/FloatingHearts";
 import { useSearchParams } from "react-router-dom";
 import { useMemo } from "react";
 
+interface CardData {
+  to: string;
+  from: string;
+  message: string;
+  photos: string[];
+}
+
 const CardView = () => {
   const [searchParams] = useSearchParams();
 
-  const cardData = useMemo(() => {
+  const cardData = useMemo<CardData | null>(() => {
     try {
-      const encoded = searchParams.get("d");
-      if (!encoded) return null;
-      const decoded = atob(encoded);
-      return JSON.parse(decoded) as {
-        to: string;
-        from: string;
-        message: string;
-        photos: string[];
-      };
+      const id = searchParams.get("id");
+      if (!id) return null;
+      const stored = localStorage.getItem(`valentine-${id}`);
+      if (!stored) return null;
+      return JSON.parse(stored);
     } catch {
       return null;
     }
@@ -30,6 +33,7 @@ const CardView = () => {
           <Heart className="w-16 h-16 text-primary mx-auto mb-4 animate-pulse-heart fill-primary" />
           <h1 className="text-4xl text-primary mb-2">Oops!</h1>
           <p className="text-muted-foreground text-xl">This love letter seems to have gotten lost 💔</p>
+          <p className="text-muted-foreground text-sm mt-2">The card may only be viewable on the device it was created on.</p>
         </div>
       </div>
     );
@@ -40,7 +44,6 @@ const CardView = () => {
       <FloatingHearts />
 
       <div className="relative z-10 flex flex-col items-center py-10 px-4">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -59,20 +62,17 @@ const CardView = () => {
           </p>
         </motion.div>
 
-        {/* Card */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
           className="w-full max-w-2xl bg-card rounded-2xl shadow-2xl shadow-primary/10 border border-border p-8 md:p-12 relative"
         >
-          {/* Corner decorations */}
           <span className="absolute top-4 left-4 text-2xl text-primary/40">💕</span>
           <span className="absolute top-4 right-4 text-2xl text-primary/40">💗</span>
           <span className="absolute bottom-4 left-4 text-2xl text-primary/40">💖</span>
           <span className="absolute bottom-4 right-4 text-2xl text-primary/40">💕</span>
 
-          {/* To */}
           <div className="mb-6">
             <span className="text-sm text-muted-foreground uppercase tracking-wider block mb-1">To</span>
             <p className="text-3xl font-handwriting text-foreground border-b-2 border-primary/30 py-2">
@@ -80,7 +80,6 @@ const CardView = () => {
             </p>
           </div>
 
-          {/* Photos */}
           {cardData.photos.length > 0 && (
             <div className="flex flex-wrap justify-center gap-6 my-8">
               {cardData.photos.map((src, i) => (
@@ -98,7 +97,6 @@ const CardView = () => {
             </div>
           )}
 
-          {/* Message */}
           {cardData.message && (
             <div className="mb-6">
               <span className="text-sm text-muted-foreground uppercase tracking-wider block mb-1">My Love Letter</span>
@@ -110,14 +108,12 @@ const CardView = () => {
             </div>
           )}
 
-          {/* Divider */}
           <div className="flex items-center gap-4 my-6">
             <div className="flex-1 h-px bg-primary/20" />
             <span className="text-primary text-xl animate-pulse-heart">♥</span>
             <div className="flex-1 h-px bg-primary/20" />
           </div>
 
-          {/* From */}
           <div>
             <span className="text-sm text-muted-foreground uppercase tracking-wider block mb-1">With all my love,</span>
             <p className="text-3xl font-handwriting text-foreground border-b-2 border-primary/30 py-2">
@@ -126,7 +122,6 @@ const CardView = () => {
           </div>
         </motion.div>
 
-        {/* Footer */}
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
