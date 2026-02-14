@@ -97,8 +97,8 @@ const Index = () => {
         >
           <span className="absolute top-3 left-3 sm:top-4 sm:left-4 text-lg sm:text-2xl text-primary/40 select-none">💕</span>
           <span className="absolute top-3 right-3 sm:top-4 sm:right-4 text-lg sm:text-2xl text-primary/40 select-none">💗</span>
-          <span className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 text-lg sm:text-2xl text-primary/40 select-none hidden sm:inline">💖</span>
-          <span className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 text-lg sm:text-2xl text-primary/40 select-none hidden sm:inline">💕</span>
+          <span className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 text-lg sm:text-2xl text-primary/40 select-none hidden sm:inline" aria-hidden>💖</span>
+          <span className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 text-lg sm:text-2xl text-primary/40 select-none hidden sm:inline" aria-hidden>💕</span>
 
           <div className="mb-4 sm:mb-6">
             <label className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider mb-1 block">To</label>
