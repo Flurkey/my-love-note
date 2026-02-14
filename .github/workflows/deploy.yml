@@ -28,6 +28,14 @@ jobs:
           cache: "npm"
 
       - run: npm ci
+      # Fail early if Supabase secrets are missing (so we don't deploy without cloud save)
+      - name: Check Supabase secrets
+        run: |
+          if [ -z "${{ secrets.VITE_SUPABASE_URL }}" ] || [ -z "${{ secrets.VITE_SUPABASE_ANON_KEY }}" ]; then
+            echo "::error::VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be set as repository secrets for shareable links."
+            exit 1
+          fi
+          echo "Supabase secrets are set."
       - run: npm run build
         env:
           BASE_PATH: /${{ github.event.repository.name }}/

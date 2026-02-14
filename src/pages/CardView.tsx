@@ -1,9 +1,11 @@
 import { motion } from "framer-motion";
-import { Heart } from "lucide-react";
+import { Heart, Download } from "lucide-react";
 import FloatingHearts from "@/components/FloatingHearts";
 import { useSearchParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { getCard } from "@/lib/cards";
+import html2canvas from "html2canvas";
+import { toast } from "sonner";
 
 export interface CardData {
   to: string;
@@ -17,6 +19,30 @@ const CardView = () => {
   const id = searchParams.get("id");
   const [cardData, setCardData] = useState<CardData | null>(null);
   const [loading, setLoading] = useState(!!id);
+  const [savingImage, setSavingImage] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  const saveCardAsImage = useCallback(async () => {
+    if (!cardRef.current) return;
+    setSavingImage(true);
+    try {
+      const canvas = await html2canvas(cardRef.current, {
+        useCORS: true,
+        scale: 2,
+        backgroundColor: null,
+        logging: false,
+      });
+      const link = document.createElement("a");
+      link.download = `valentine-card-${cardData?.to?.replace(/\s+/g, "-") ?? "love"}.png`;
+      link.href = canvas.toDataURL("image/png");
+      link.click();
+      toast.success("Card saved to your device! 💌");
+    } catch {
+      toast.error("Couldn’t save image. Try taking a screenshot instead.");
+    } finally {
+      setSavingImage(false);
+    }
+  }, [cardData?.to]);
 
   useEffect(() => {
     if (!id) {
@@ -99,6 +125,7 @@ const CardView = () => {
         </motion.div>
 
         <motion.div
+          ref={cardRef}
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
@@ -156,6 +183,35 @@ const CardView = () => {
               {cardData.from || "Your Valentine"}
             </p>
           </div>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          className="mt-6 flex flex-col items-center gap-3"
+        >
+          <button
+            type="button"
+            onClick={saveCardAsImage}
+            disabled={savingImage}
+            className="flex items-center justify-center gap-2 bg-primary text-primary-foreground px-5 py-3 rounded-full font-handwriting text-base sm:text-lg shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:scale-[1.02] active:scale-[0.98] transition-transform min-h-[48px] touch-manipulation disabled:opacity-70"
+          >
+            {savingImage ? (
+              <>
+                <span className="inline-block w-5 h-5 border-2 border-primary-foreground border-t-transparent rounded-full animate-spin" />
+                Saving…
+              </>
+            ) : (
+              <>
+                <Download className="w-5 h-5 shrink-0" />
+                Save card as image
+              </>
+            )}
+          </button>
+          <p className="text-xs text-muted-foreground text-center max-w-xs">
+            Download as a PNG to keep it on your device.
+          </p>
         </motion.div>
 
         <motion.p

@@ -51,7 +51,11 @@ const Index = () => {
       if (result.ok) {
         toast.success("Your Valentine's card is ready! Share the link with anyone 💖");
       } else {
-        toast.error("Card saved locally, but cloud save failed. Link may only work on this device.");
+        toast.error(
+          result.error
+            ? `Card saved locally. Cloud save failed: ${result.error}`
+            : "Card saved locally, but cloud save failed. Link may only work on this device."
+        );
       }
     } else {
       toast.success("Your Valentine's card is ready! 💖 (Link works on this device only until you add cloud storage.)");
