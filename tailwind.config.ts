@@ -47,15 +47,22 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        rose: {
+          deep: "hsl(var(--rose-deep))",
+          light: "hsl(var(--rose-light))",
+        },
+        cream: "hsl(var(--cream))",
+        blush: "hsl(var(--blush))",
+        gold: "hsl(var(--gold))",
         sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+          DEFAULT: "hsl(var(--sidebar-background, 0 0% 98%))",
+          foreground: "hsl(var(--sidebar-foreground, 240 5.3% 26.1%))",
+          primary: "hsl(var(--sidebar-primary, 240 5.9% 10%))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground, 0 0% 98%))",
+          accent: "hsl(var(--sidebar-accent, 240 4.8% 95.9%))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground, 240 5.9% 10%))",
+          border: "hsl(var(--sidebar-border, 220 13% 91%))",
+          ring: "hsl(var(--sidebar-ring, 217.2 91.2% 59.8%))",
         },
       },
       borderRadius: {
@@ -65,25 +72,22 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        pulse_heart: {
+          "0%, 100%": { transform: "scale(1)" },
+          "50%": { transform: "scale(1.15)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        "pulse-heart": "pulse_heart 1.2s ease-in-out infinite",
       },
     },
   },
