@@ -102,12 +102,12 @@ const CardView = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
-          className="w-full max-w-2xl bg-card rounded-2xl shadow-2xl shadow-primary/10 border border-border p-4 sm:p-6 md:p-8 lg:p-12 relative"
+          className="w-full max-w-2xl bg-card rounded-2xl shadow-2xl shadow-primary/10 border border-border pt-10 px-6 pb-4 sm:p-6 md:p-8 lg:p-12 relative"
         >
-          <span className="absolute top-3 left-3 sm:top-4 sm:left-4 text-lg sm:text-2xl text-primary/40 select-none">💕</span>
-          <span className="absolute top-3 right-3 sm:top-4 sm:right-4 text-lg sm:text-2xl text-primary/40 select-none">💗</span>
-          <span className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 text-lg sm:text-2xl text-primary/40 select-none hidden sm:inline">💖</span>
-          <span className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 text-lg sm:text-2xl text-primary/40 select-none hidden sm:inline">💕</span>
+          <span className="absolute top-3 left-3 sm:top-4 sm:left-4 text-lg sm:text-2xl text-primary/40 select-none" aria-hidden>💕</span>
+          <span className="absolute top-3 right-3 sm:top-4 sm:right-4 text-lg sm:text-2xl text-primary/40 select-none" aria-hidden>💗</span>
+          <span className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 text-lg sm:text-2xl text-primary/40 select-none hidden sm:inline" aria-hidden>💖</span>
+          <span className="absolute bottom-3 right-3 sm:bottom-4 sm:right-4 text-lg sm:text-2xl text-primary/40 select-none hidden sm:inline" aria-hidden>💕</span>
 
           <div className="mb-4 sm:mb-6">
             <span className="text-xs sm:text-sm text-muted-foreground uppercase tracking-wider block mb-1">To</span>
