@@ -14,7 +14,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter basename={import.meta.env.BASE_URL.replace(/\/$/, "") || undefined}>
+      <BrowserRouter basename={(import.meta.env.VITE_BASE_PATH ?? import.meta.env.BASE_URL).replace(/\/$/, "") || undefined}>
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/card" element={<CardView />} />

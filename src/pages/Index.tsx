@@ -11,8 +11,8 @@ const generateId = () => Math.random().toString(36).substring(2, 10);
 
 /** Build share URL with correct origin and base path (for GitHub Pages). */
 const getShareUrl = (id: string) => {
-  const base = import.meta.env.BASE_URL;
-  return `${window.location.origin}${base}card?id=${id}`;
+  const base = (import.meta.env.VITE_BASE_PATH ?? import.meta.env.BASE_URL) || "/";
+  return `${window.location.origin}${base.replace(/\/$/, "")}/card?id=${id}`;
 };
 
 const Index = () => {

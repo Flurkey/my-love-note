@@ -3,8 +3,9 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
 // https://vitejs.dev/config/
-// For GitHub Pages: set BASE_PATH to your repo name, e.g. BASE_PATH=/my-love-note/
-const base = process.env.BASE_PATH ?? "/";
+// For GitHub Pages: set BASE_PATH to repo name; we use relative base so assets resolve correctly.
+const basePath = process.env.BASE_PATH;
+const base = basePath ? "./" : "/";
 
 export default defineConfig({
   base,
