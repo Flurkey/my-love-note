@@ -15,10 +15,13 @@ const FloatingHearts = () => {
   const [hearts, setHearts] = useState<FloatingHeart[]>([]);
 
   useEffect(() => {
-    const generated: FloatingHeart[] = Array.from({ length: 20 }, (_, i) => ({
+    const isNarrow = typeof window !== "undefined" && window.innerWidth < 640;
+    const count = isNarrow ? 10 : 20;
+    const maxSize = isNarrow ? 18 : 24;
+    const generated: FloatingHeart[] = Array.from({ length: count }, (_, i) => ({
       id: i,
       left: Math.random() * 100,
-      size: 14 + Math.random() * 24,
+      size: 10 + Math.random() * maxSize,
       duration: 8 + Math.random() * 12,
       delay: Math.random() * 10,
       char: HEART_CHARS[Math.floor(Math.random() * HEART_CHARS.length)],

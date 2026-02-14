@@ -41,7 +41,7 @@ const PhotoFrame = ({ label = "Add Photo", onPhotoChange }: PhotoFrameProps) => 
   return (
     <motion.div
       whileHover={{ scale: 1.03, rotate: Math.random() > 0.5 ? 1 : -1 }}
-      className="relative w-48 h-48 rounded-lg border-4 border-dashed border-primary/30 bg-secondary/50 flex items-center justify-center cursor-pointer overflow-hidden group transition-colors hover:border-primary/60"
+      className="relative w-36 h-36 min-[400px]:w-40 min-[400px]:h-40 sm:w-44 sm:h-44 md:w-48 md:h-48 rounded-lg border-4 border-dashed border-primary/30 bg-secondary/50 flex items-center justify-center cursor-pointer overflow-hidden group transition-colors hover:border-primary/60 touch-manipulation min-h-[144px]"
       onClick={() => inputRef.current?.click()}
     >
       <input
